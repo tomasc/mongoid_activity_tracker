@@ -5,10 +5,10 @@ require_relative '../../lib/mongoid_activity_tracker/track_activity'
 module MongoidActivityTracker
   describe TrackActivity do
     let(:actor) { TestActor.new }
-    subject { TrackActivity.with(TestTrackerTwo, actor) }
     let(:sub) { TestSubject.new }
+    subject { TrackActivity.with(TestTrackerTwo, actor) }
 
-    describe '.call' do
+    describe '.track' do
       before do
         @tracker = subject.track('create', subject: sub)
       end
