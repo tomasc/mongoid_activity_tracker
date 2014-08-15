@@ -15,8 +15,8 @@ module MongoidActivityTracker
         attr_accessor "#{relation_name}_cache_methods"
 
         define_method "#{relation_name}_cache_methods" do
-          instance_variable_set "@#{relation_name}_cache_methods", cache_methods unless instance_variable_get "@#{relation_name}_cache_methods"
-          instance_variable_get "@#{relation_name}_cache_methods"
+          instance_variable_set("@#{relation_name}_cache_methods", cache_methods) unless instance_variable_get("@#{relation_name}_cache_methods")
+          instance_variable_get("@#{relation_name}_cache_methods")
         end
 
         define_method "#{relation_name}_cache_object" do
