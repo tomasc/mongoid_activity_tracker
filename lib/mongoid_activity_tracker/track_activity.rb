@@ -12,10 +12,9 @@ module MongoidActivityTracker
       @actor = actor
     end
 
-    def track action
+    def track action, options={}
       @tracker_class.create(
-        action: action,
-        actor: @actor
+        { action: action, actor: @actor}.merge(options)
       )
     end
 

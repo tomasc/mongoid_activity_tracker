@@ -49,6 +49,11 @@ class TestTracker
   include MongoidActivityTracker::Tracker
 end
 
+class TestTrackerTwo
+  include MongoidActivityTracker::Tracker
+  tracks :subject
+end
+
 class TestActor
   include Mongoid::Document
 end

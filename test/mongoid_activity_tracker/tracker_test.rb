@@ -2,15 +2,6 @@ require 'test_helper'
 
 require_relative '../../lib/mongoid_activity_tracker/tracker'
 
-# ---------------------------------------------------------------------
-
-class TestTrackerTwo
-  include MongoidActivityTracker::Tracker
-  tracks :subject
-end
-
-# ---------------------------------------------------------------------
-      
 module MongoidActivityTracker
   describe Tracker do
 
