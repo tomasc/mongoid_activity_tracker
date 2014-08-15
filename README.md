@@ -60,7 +60,7 @@ class MyTracker
 end
 ```
 
-Then, specify your subject when tracking the activity along the action:
+Then, specify your subject when tracking the activity:
 
 ```Ruby
 my_tracker = MongoidActivityTracker::TrackActivity.with(MyTracker, current_user)
