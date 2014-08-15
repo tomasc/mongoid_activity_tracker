@@ -30,7 +30,6 @@ Setup a class that will record the activity:
 
 ```Ruby
 class MyTracker
-  include Mongoid::Document
   include MongoidActivityTracker::Tracker
 end
 ```
