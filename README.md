@@ -37,12 +37,14 @@ end
 Track the activity:
 
 ```Ruby
-my_tracker = MongoidActivityTracker::TrackActivity.with(MyTracker, current_user).track('create')
+my_tracker = MongoidActivityTracker::TrackActivity.with(MyTracker, current_user)
 
-my_tracker.actor # returns the current_user
-my_tracker.actor_cache # => { to_s: … }
-my_tracker.actor_cache_object.to_s # the 'actor_cache_object' wraps the actor_cache hash into an OpenStruct
-my_tracker.action # => 'create'
+res = my_tracker.track('create')
+
+res.actor # returns the current_user
+res.actor_cache # => { to_s: … }
+res.actor_cache_object.to_s # the 'actor_cache_object' wraps the actor_cache hash into an OpenStruct
+res.action # => 'create'
 ```
 
 ## Contributing
