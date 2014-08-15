@@ -2,6 +2,8 @@
 
 [![Build Status](https://travis-ci.org/tomasc/mongoid_activity_tracker.svg)](https://travis-ci.org/tomasc/mongoid_activity_tracker) [![Gem Version](https://badge.fury.io/rb/mongoid_activity_tracker.svg)](http://badge.fury.io/rb/mongoid_activity_tracker) [![Coverage Status](https://img.shields.io/coveralls/tomasc/mongoid_activity_tracker.svg)](https://coveralls.io/r/tomasc/mongoid_activity_tracker)
 
+Module and a service class to help with tracking activity in your application.
+
 ## Installation
 
 Add this line to your application's Gemfile:
@@ -23,6 +25,21 @@ $ gem install mongoid_activity_tracker
 ```
 
 ## Usage
+
+Setup a class that will record the activity:
+
+```Ruby
+class MyTracker
+  include Mongoid::Document
+  include MongoidActivityTracker::Tracker
+end
+```
+
+Track the activity:
+
+```Ruby
+MongoidActivityTracker::Track.with(MyTracker).on(actor: current_user, subject: my_tracked_object)
+```
 
 ## Contributing
 
