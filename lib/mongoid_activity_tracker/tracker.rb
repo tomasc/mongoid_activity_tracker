@@ -6,34 +6,48 @@ module MongoidActivityTracker
 
     attr_accessor :actor_cache_methods
 
+    module ClassMethods
+      def tracks relation_name, cache_methods: %i(to_s)
+        belongs_to relation_name, polymorphic: true
+
+        field "#{relation_name}_cache", type: Hash, default: {}
+
+        attr_accessor "#{relation_name}_cache_methods"
+
+        define_method "#{relation_name}_cache_methods" do
+          instance_variable_set "@#{relation_name}_cache_methods", cache_methods unless instance_variable_get "@#{relation_name}_cache_methods"
+          instance_variable_get "@#{relation_name}_cache_methods"
+        end
+
+        define_method "#{relation_name}_cache_object" do
+          OpenStruct.new(send("#{relation_name}_cache"))
+        end
+
+        before_save -> { set_cache(relation_name) }
+      end
+    end
+
+    # ---------------------------------------------------------------------
+
     def self.included base
+      base.extend ClassMethods
       base.class_eval do
         include Mongoid::Document
 
-        belongs_to :actor, polymorphic: true
-
         field :action, type: String
-        field :actor_cache, type: Hash, default: {}
+
+        tracks :actor
 
         validates :actor, presence: true
         validates :action, presence: true
-
-        before_save -> { set_cache(:actor) }
       end
 
-      base.extend ClassMethods
     end
+
+    # =====================================================================
 
     def created_at
       self.id.generation_time.in_time_zone(Time.zone)
-    end
-
-    def actor_cache_methods
-      @actor_cache_methods ||= %i(to_s)
-    end
-
-    def actor_cache_object
-      OpenStruct.new(actor_cache)
     end
 
     private # =============================================================

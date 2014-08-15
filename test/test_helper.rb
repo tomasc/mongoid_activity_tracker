@@ -52,3 +52,7 @@ end
 class TestActor
   include Mongoid::Document
 end
+
+class TestSubject
+  include Mongoid::Document
+end

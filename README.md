@@ -47,6 +47,33 @@ res.actor_cache_object.to_s # the 'actor_cache_object' wraps the actor_cache has
 res.action # => 'create'
 ```
 
+## Configuration
+
+Along the action, it is possible to track any number of related documents.
+
+First, configure your tracker class using the `.tracks` macros:
+
+```Ruby
+class MyTracker
+  include MongoidActivityTracker::Tracker
+  tracks :subject, cache_methods: [:to_s, :id]
+end
+```
+
+Then, specify your subject when tracking the activity along the action:
+
+```Ruby
+my_tracker = MongoidActivityTracker::TrackActivity.with(MyTracker, current_user)
+
+res = my_tracker.track('create', subject: my_subject)
+
+res.subject # returns my_subject
+res.subject_cache # => { to_s: …, id: … }
+res.subject_cache_object.to_s # …
+```
+
+By default, the `:cache_methods` parameters is set to track [:to_s].
+
 ## Contributing
 
 1. Fork it ( https://github.com/tomasc/mongoid_activity_tracker/fork )
