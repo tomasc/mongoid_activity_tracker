@@ -9,13 +9,16 @@ module MongoidActivityTracker
 
     describe '.call' do
       before do
-        @tracker = subject.track
+        @tracker = subject.track('create')
       end
       it 'returns the tracker instance' do
         @tracker.must_be_kind_of TestTracker
       end
       it 'always sets the :actor' do
         @tracker.actor.must_equal actor
+      end
+      it 'always sets the :action' do
+        @tracker.action.must_equal 'create'
       end
     end
 

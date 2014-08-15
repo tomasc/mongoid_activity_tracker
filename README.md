@@ -37,7 +37,7 @@ end
 Track the activity:
 
 ```Ruby
-MongoidActivityTracker::TrackActivity.with(MyTracker, current_user).track(subject: my_tracked_object)
+MongoidActivityTracker::TrackActivity.with(MyTracker, current_user).track('create')
 ```
 
 ## Contributing

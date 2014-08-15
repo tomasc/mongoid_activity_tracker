@@ -14,6 +14,9 @@ module MongoidActivityTracker
     end
 
     describe 'fields' do
+      it 'has :action' do
+        subject.must_respond_to :action
+      end
       it 'has :actor_cache' do
         subject.must_respond_to :actor_cache
         subject.actor_cache.must_be_kind_of Hash

@@ -10,7 +10,11 @@ module MongoidActivityTracker
         
         belongs_to :actor, polymorphic: true
         
+        field :action, type: String
         field :actor_cache, type: Hash, default: {}
+
+        validates :actor, presence: true
+        validates :action, presence: true
       end
 
       base.extend ClassMethods

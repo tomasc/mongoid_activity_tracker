@@ -12,8 +12,9 @@ module MongoidActivityTracker
       @actor = actor
     end
 
-    def track
+    def track action
       @tracker_class.create(
+        action: action,
         actor: @actor
       )
     end
