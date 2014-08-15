@@ -17,6 +17,9 @@ module MongoidActivityTracker
       it 'always sets the :actor' do
         @tracker.actor.must_equal actor
       end
+      it 'sets the :actor_cache with :to_s by default' do
+        @tracker.actor_cache.must_equal actor.to_s
+      end
       it 'always sets the :action' do
         @tracker.action.must_equal 'create'
       end
