@@ -74,6 +74,14 @@ res.subject_cache_object.to_s # …
 
 By default, the `:cache_methods` parameters is set to track [:to_s].
 
+You can subclass your tracker  class for specific cases:
+
+```Ruby
+class MyTargetTracker < MyTracker
+  tracks :target
+end
+```
+
 ## Contributing
 
 1. Fork it ( https://github.com/tomasc/mongoid_activity_tracker/fork )
