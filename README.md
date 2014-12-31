@@ -49,7 +49,7 @@ res.action # => :create
 
 Along the action, it is possible to track any number of related documents.
 
-First, configure the tracker class using the `.tracks` macros:
+First, configure the tracker class using the `.tracks` macro:
 
 ```Ruby
 class MyTracker
