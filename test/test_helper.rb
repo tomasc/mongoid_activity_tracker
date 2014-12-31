@@ -3,9 +3,9 @@ require 'database_cleaner'
 require 'minitest'
 require 'minitest/autorun'
 require 'minitest/spec'
+
 require 'mongoid'
 require 'mongoid_activity_tracker'
-require 'mongoid_activity_tracker/tracker'
 
 if ENV["CI"]
   require "coveralls"
@@ -39,17 +39,12 @@ DatabaseCleaner.orm = :mongoid
 DatabaseCleaner.strategy = :truncation
 
 class MiniTest::Spec
-  before(:each) { DatabaseCleaner.start }
-  after(:each) { DatabaseCleaner.clean }
+  before(:each) { DatabaseCleaner.clean }
 end
 
 # ---------------------------------------------------------------------
 
 class TestTracker
-  include MongoidActivityTracker::Tracker
-end
-
-class TestTrackerTwo
   include MongoidActivityTracker::Tracker
   tracks :subject
 end

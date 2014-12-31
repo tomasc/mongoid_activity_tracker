@@ -7,6 +7,15 @@ module MongoidActivityTracker
     attr_accessor :actor_cache_methods
 
     module ClassMethods
+
+      def track _actor, _action, options={}
+        self.create(
+          { action: _action, actor: _actor }.merge(options)
+        )
+      end
+
+      # ---------------------------------------------------------------------
+      
       def tracks relation_name, cache_methods: %i(to_s)
         belongs_to relation_name, polymorphic: true
 
@@ -34,7 +43,7 @@ module MongoidActivityTracker
       base.class_eval do
         include Mongoid::Document
 
-        field :action, type: String
+        field :action, type: Symbol
 
         tracks :actor
 

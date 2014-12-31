@@ -37,47 +37,51 @@ end
 Track the activity:
 
 ```Ruby
-my_tracker = MongoidActivityTracker::TrackActivity.with(MyTracker, current_user)
-
-res = my_tracker.track('create')
+res = MyTracker.track(current_user, :create)
 
 res.actor # returns the current_user
 res.actor_cache # => { to_s: … }
 res.actor_cache_object.to_s # the 'actor_cache_object' wraps the actor_cache hash into an OpenStruct
-res.action # => 'create'
+res.action # => :create
 ```
 
 ## Configuration
 
 Along the action, it is possible to track any number of related documents.
 
-First, configure your tracker class using the `.tracks` macros:
+First, configure the tracker class using the `.tracks` macros:
 
 ```Ruby
 class MyTracker
   include MongoidActivityTracker::Tracker
-  tracks :subject, cache_methods: [:to_s, :id]
+  tracks :subject
 end
 ```
 
-Then, specify your subject when tracking the activity:
+Then, specify the subject when tracking the activity:
 
 ```Ruby
-my_tracker = MongoidActivityTracker::TrackActivity.with(MyTracker, current_user)
+res = MyTracker.track(current_user, :create, subject: my_subject)
 
-res = my_tracker.track('create', subject: my_subject)
-
-res.subject # returns my_subject
-res.subject_cache # => { to_s: …, id: … }
+res.subject # => my_subject
+res.subject_cache # => { to_s: … }
 res.subject_cache_object.to_s # …
 ```
 
-By default, the `:cache_methods` parameters is set to track [:to_s].
-
-You can subclass your tracker  class for specific cases:
+By default, the `:cache_methods` parameter is set to track [:to_s]. It can be customised to cache results of other methods as follows:
 
 ```Ruby
-class MyTargetTracker < MyTracker
+class MyTracker
+  include MongoidActivityTracker::Tracker
+  tracks :actor, cache_methods: [:to_s, :first_name, :last_name]
+  tracks :subject, cache_methods: [:to_s, :my_custom_method]
+end
+```
+
+The tracker class can be also subclassed:
+
+```Ruby
+class MyTrackerWithTarget < MyTracker
   tracks :target
 end
 ```
