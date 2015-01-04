@@ -68,7 +68,7 @@ res.subject_cache # => { to_s: … }
 res.subject_cache_object.to_s # …
 ```
 
-By default, the `:cache_methods` parameter is set to track [:to_s]. It can be customised to cache results of other methods as follows:
+By default, the `:cache_methods` parameter is set to store the result of `:to_s` method. This is valuable when displaying the activity overview (no need for additional query for the related document), or should the related document no longer exist. the list of methods to be cached can be customised as follows:
 
 ```Ruby
 class MyTracker
