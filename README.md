@@ -74,7 +74,7 @@ By default, the `:cache_methods` parameter is set to track [:to_s]. It can be cu
 class MyTracker
   include MongoidActivityTracker::Tracker
   tracks :actor, cache_methods: [:to_s, :first_name, :last_name]
-  tracks :subject, cache_methods: [:to_s, :my_custom_method]
+  tracks :subject, cache_methods: [:to_s, :some_other_method]
 end
 ```
 
