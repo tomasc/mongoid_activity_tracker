@@ -2,7 +2,7 @@
 
 [![Build Status](https://travis-ci.org/tomasc/mongoid_activity_tracker.svg)](https://travis-ci.org/tomasc/mongoid_activity_tracker) [![Gem Version](https://badge.fury.io/rb/mongoid_activity_tracker.svg)](http://badge.fury.io/rb/mongoid_activity_tracker) [![Coverage Status](https://img.shields.io/coveralls/tomasc/mongoid_activity_tracker.svg)](https://coveralls.io/r/tomasc/mongoid_activity_tracker)
 
-Module and a service class to help with tracking activity in your application.
+Module to help with tracking activity in your application.
 
 ## Installation
 
