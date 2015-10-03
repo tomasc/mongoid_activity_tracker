@@ -12,27 +12,8 @@ if ENV["CI"]
   Coveralls.wear!
 end
 
-ENV["MONGOID_TEST_HOST"] ||= "localhost"
-ENV["MONGOID_TEST_PORT"] ||= "27017"
-
-HOST = ENV["MONGOID_TEST_HOST"]
-PORT = ENV["MONGOID_TEST_PORT"].to_i
-
-def database_id
-  "mongoid_activity_tracker_test"
-end
-
-CONFIG = {
-  sessions: {
-    default: {
-      database: database_id,
-      hosts: [ "#{HOST}:#{PORT}" ]
-    }
-  }
-}
-
 Mongoid.configure do |config|
-  config.load_configuration(CONFIG)
+  config.connect_to('mongoid_activity_tracker_test')
 end
 
 DatabaseCleaner.orm = :mongoid
