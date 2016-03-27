@@ -3,20 +3,16 @@ require 'ostruct'
 
 module MongoidActivityTracker
   module Tracker
-
     attr_accessor :actor_cache_methods
 
     module ClassMethods
-
-      def track _actor, _action, options={}
-        self.create(
-          { action: _action, actor: _actor }.merge(options)
-        )
+      def track(_actor, _action, options = {})
+        create({ action: _action, actor: _actor }.merge(options))
       end
 
       # ---------------------------------------------------------------------
-      
-      def tracks relation_name, cache_methods: %i(to_s)
+
+      def tracks(relation_name, cache_methods: %i(to_s))
         belongs_to relation_name, polymorphic: true
 
         field "#{relation_name}_cache", type: Hash, default: {}
@@ -38,7 +34,7 @@ module MongoidActivityTracker
 
     # ---------------------------------------------------------------------
 
-    def self.included base
+    def self.included(base)
       base.extend ClassMethods
       base.class_eval do
         include Mongoid::Document
@@ -50,26 +46,24 @@ module MongoidActivityTracker
         validates :actor, presence: true
         validates :action, presence: true
       end
-
     end
 
     # =====================================================================
 
     def created_at
-      self.id.generation_time.in_time_zone(Time.zone)
+      id.generation_time.in_time_zone(Time.zone)
     end
 
     private # =============================================================
 
-    def set_cache name
-      return unless self.send("#{name}_cache_methods").present?
-      return unless self.send(name).present?
+    def set_cache(name)
+      return unless send("#{name}_cache_methods").present?
+      return unless send(name).present?
 
-      self.send("#{name}_cache_methods").each do |m|
-        next if self.send("#{name}_cache")[m].present?
-        self.send("#{name}_cache")[m] = self.send(name).send(m) if self.send(name).respond_to?(m)
+      send("#{name}_cache_methods").each do |m|
+        next if send("#{name}_cache")[m].present?
+        send("#{name}_cache")[m] = send(name).send(m) if send(name).respond_to?(m)
       end
     end
-
   end
 end

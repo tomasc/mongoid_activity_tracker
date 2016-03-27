@@ -2,7 +2,6 @@ require 'test_helper'
 
 module MongoidActivityTracker
   describe Tracker do
-
     let(:actor) { TestActor.new }
     let(:sub) { TestSubject.new }
     subject { TestTracker.new }
@@ -24,7 +23,7 @@ module MongoidActivityTracker
     end
 
     # ---------------------------------------------------------------------
-    
+
     describe '.track' do
       before do
         @result = TestTracker.track(actor, :create, subject: sub)
@@ -36,7 +35,7 @@ module MongoidActivityTracker
         @result.actor.must_equal actor
       end
       it 'sets the :actor_cache with :to_s by default' do
-        @result.actor_cache.must_equal({ to_s: actor.to_s })
+        @result.actor_cache.must_equal(to_s: actor.to_s)
       end
       it 'sets the :action' do
         @result.action.must_equal :create
@@ -72,9 +71,9 @@ module MongoidActivityTracker
         subject.subject_cache.fetch(:to_s).must_equal test_subject.to_s
       end
     end
-    
+
     # ---------------------------------------------------------------------
-    
+
     describe ':created_at' do
       it 'infers time from BSON id' do
         subject.must_respond_to :created_at
@@ -110,6 +109,5 @@ module MongoidActivityTracker
         subject.actor_cache_object.must_respond_to :to_s
       end
     end
-
   end
 end

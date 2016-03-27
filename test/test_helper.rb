@@ -7,11 +7,13 @@ require 'minitest/spec'
 require 'mongoid'
 require 'mongoid_activity_tracker'
 
-if ENV["CI"]
-  require "coveralls"
+if ENV['CI']
+  require 'coveralls'
   Coveralls.wear!
 end
 
+Mongoid.logger.level = Logger::INFO
+Mongo::Logger.logger.level = Logger::INFO
 Mongoid.configure do |config|
   config.connect_to('mongoid_activity_tracker_test')
 end
