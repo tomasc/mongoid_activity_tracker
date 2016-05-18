@@ -25,23 +25,22 @@ module MongoidActivityTracker
     # ---------------------------------------------------------------------
 
     describe '.track' do
-      before do
-        @result = TestTracker.track(actor, :create, subject: sub)
-      end
+      let(:result) { TestTracker.track(actor, :create, subject: sub) }
+
       it 'returns new object' do
-        @result.must_be_kind_of TestTracker
+        result.must_be_kind_of TestTracker
       end
       it 'always sets the :actor' do
-        @result.actor.must_equal actor
+        result.actor.must_equal actor
       end
       it 'sets the :actor_cache with :to_s by default' do
-        @result.actor_cache.must_equal(to_s: actor.to_s)
+        result.actor_cache.must_equal(to_s: actor.to_s)
       end
       it 'sets the :action' do
-        @result.action.must_equal :create
+        result.action.must_equal :create
       end
       it 'sets any other attributes' do
-        @result.subject.must_equal sub
+        result.subject.must_equal sub
       end
     end
 

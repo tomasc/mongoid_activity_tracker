@@ -6,26 +6,30 @@ module MongoidActivityTracker
     attr_accessor :actor_cache_methods
 
     module ClassMethods
-      def track(_actor, _action, options = {})
-        create({ action: _action, actor: _actor }.merge(options))
+      def track(actor, action, options = {})
+        create({ action: action, actor: actor }.merge(options))
       end
 
       # ---------------------------------------------------------------------
 
       def tracks(relation_name, cache_methods: %i(to_s))
+        field_name = [relation_name, 'cache'].join('_')
+        accessor_name = [relation_name, 'cache_methods'].join('_')
+        instance_variable_name = ['@', accessor_name].join
+
+        field field_name, type: Hash, default: {}
+
         belongs_to relation_name, polymorphic: true
 
-        field "#{relation_name}_cache", type: Hash, default: {}
+        attr_accessor accessor_name
 
-        attr_accessor "#{relation_name}_cache_methods"
-
-        define_method "#{relation_name}_cache_methods" do
-          instance_variable_set("@#{relation_name}_cache_methods", cache_methods) unless instance_variable_get("@#{relation_name}_cache_methods")
-          instance_variable_get("@#{relation_name}_cache_methods")
+        define_method accessor_name do
+          instance_variable_set(instance_variable_name, cache_methods) unless instance_variable_get(instance_variable_name)
+          instance_variable_get(instance_variable_name)
         end
 
-        define_method "#{relation_name}_cache_object" do
-          OpenStruct.new(send("#{relation_name}_cache"))
+        define_method [relation_name, 'cache_object'].join('_') do
+          OpenStruct.new(send(field_name))
         end
 
         before_save -> { set_cache(relation_name) }
@@ -56,13 +60,16 @@ module MongoidActivityTracker
 
     private # =============================================================
 
-    def set_cache(name)
-      return unless send("#{name}_cache_methods").present?
-      return unless send(name).present?
+    def set_cache(relation_name)
+      accessor_name = [relation_name, 'cache_methods'].join('_')
+      field_name = [relation_name, 'cache'].join('_')
 
-      send("#{name}_cache_methods").each do |m|
-        next if send("#{name}_cache")[m].present?
-        send("#{name}_cache")[m] = send(name).send(m) if send(name).respond_to?(m)
+      return unless send(accessor_name).present?
+      return unless send(relation_name).present?
+
+      send(accessor_name).each do |m|
+        next if send(field_name)[m].present?
+        send(field_name)[m] = send(relation_name).send(m) if send(relation_name).respond_to?(m)
       end
     end
   end
