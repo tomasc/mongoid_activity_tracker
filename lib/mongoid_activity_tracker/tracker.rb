@@ -19,7 +19,7 @@ module MongoidActivityTracker
 
         field field_name, type: Hash, default: {}
 
-        belongs_to relation_name, polymorphic: true
+        belongs_to relation_name, polymorphic: true, optional: true
 
         attr_accessor accessor_name
 
