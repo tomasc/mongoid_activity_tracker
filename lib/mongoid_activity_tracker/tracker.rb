@@ -10,6 +10,10 @@ module MongoidActivityTracker
         create({ action: action, actor: actor }.merge(options))
       end
 
+      def track!(actor, action, options = {})
+        create!({ action: action, actor: actor }.merge(options))
+      end
+
       # ---------------------------------------------------------------------
 
       def tracks(relation_name, cache_methods: %i(to_s))
