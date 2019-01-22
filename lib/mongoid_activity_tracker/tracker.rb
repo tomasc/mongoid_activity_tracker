@@ -14,9 +14,7 @@ module MongoidActivityTracker
         create!({ action: action, actor: actor }.merge(options))
       end
 
-      # ---------------------------------------------------------------------
-
-      def tracks(relation_name, cache_methods: %i(to_s))
+      def tracks(relation_name, cache_methods: %i[to_s])
         field_name = [relation_name, 'cache'].join('_')
         accessor_name = [relation_name, 'cache_methods'].join('_')
         instance_variable_name = ['@', accessor_name].join
@@ -40,8 +38,6 @@ module MongoidActivityTracker
       end
     end
 
-    # ---------------------------------------------------------------------
-
     def self.included(base)
       base.extend ClassMethods
       base.class_eval do
@@ -56,13 +52,11 @@ module MongoidActivityTracker
       end
     end
 
-    # =====================================================================
-
     def created_at
       id.generation_time.in_time_zone(Time.zone)
     end
 
-    private # =============================================================
+    private
 
     def set_cache(relation_name)
       accessor_name = [relation_name, 'cache_methods'].join('_')
@@ -73,6 +67,7 @@ module MongoidActivityTracker
 
       send(accessor_name).each do |m|
         next if send(field_name)[m].present?
+
         send(field_name)[m] = send(relation_name).send(m) if send(relation_name).respond_to?(m)
       end
     end
