@@ -10,6 +10,24 @@ describe MongoidActivityTracker::Tracker do
     it { subject.must_respond_to :actor }
   end
 
+  describe 'validations' do
+    describe 'by default' do
+      before { subject.valid? }
+
+      it { subject.errors.messages.keys.must_include :actor }
+      it { subject.errors.messages.keys.must_include :action }
+    end
+
+    describe 'accepts to_s stored in actor_cache' do
+      before do
+        subject.actor_cache[:to_s] = 'John Doe'
+        subject.valid?
+      end
+
+      it { subject.errors.messages.keys.wont_include :actor }
+    end
+  end
+
   describe 'fields' do
     it { subject.must_respond_to :action }
     it { subject.must_respond_to :actor_cache }
@@ -39,7 +57,7 @@ describe MongoidActivityTracker::Tracker do
 
       before do
         subject.subject = tsubject
-        subject.run_callbacks(:save)
+        subject.run_callbacks(:validation)
       end
 
       it { subject.subject_cache.fetch(:to_s).must_equal tsubject.to_s }
@@ -54,7 +72,7 @@ describe MongoidActivityTracker::Tracker do
   describe ':actor_cache' do
     before do
       subject.actor = actor
-      subject.run_callbacks(:save)
+      subject.run_callbacks(:validation)
     end
 
     it { subject.actor_cache.fetch(:to_s).must_equal actor.to_s }
@@ -62,7 +80,7 @@ describe MongoidActivityTracker::Tracker do
     describe ':to_s' do
       before do
         subject.actor_cache[:to_s] = 'foo-bar'
-        subject.run_callbacks(:save)
+        subject.run_callbacks(:validation)
       end
 
       it { subject.actor_cache.fetch(:to_s).must_equal 'foo-bar' }
@@ -71,7 +89,7 @@ describe MongoidActivityTracker::Tracker do
     describe '#actor_cache_methods' do
       before do
         subject.actor_cache_methods = %i[class]
-        subject.run_callbacks(:save)
+        subject.run_callbacks(:validation)
       end
 
       it { subject.actor_cache.fetch(:class).must_equal TestActor }

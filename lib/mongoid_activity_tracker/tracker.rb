@@ -34,7 +34,7 @@ module MongoidActivityTracker
           OpenStruct.new(send(field_name))
         end
 
-        before_save -> { set_cache(relation_name) }
+        before_validation -> { set_cache(relation_name) }
       end
     end
 
@@ -47,7 +47,7 @@ module MongoidActivityTracker
 
         tracks :actor
 
-        validates :actor, presence: true
+        validates :actor, presence: true, unless: -> { actor_cache && actor_cache[:to_s].present? }
         validates :action, presence: true
       end
     end
